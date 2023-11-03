@@ -1,17 +1,22 @@
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  const GitUser = sequelize.define('GitUser', {
-    id: {
-      id: DataTypes.STRING,
-      primaryKey: true,
-      allowNull: false
-    },
+  class GitUser extends Model {
+    static associate(models) {
+      GitUser.hasMany(models.Repository);
+      GitUser.hasMany(models.Issue);
+      GitUser.hasMany(models.Issue);
+    }
+  }
+  GitUser.init({
+    id: DataTypes.STRING,
     username: DataTypes.STRING,
     avatar_url: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'GitUser',
   });
-
-  GitUser.associate = models => {
-    GitUser.hasMany(models.Repository);
-  };
-
-  return Commit;
-}
+  return GitUser;
+};

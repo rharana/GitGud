@@ -1,50 +1,48 @@
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Commit', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Commits', {
       id: {
+        type: Sequelize.STRING,
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.STRING
       },
       title: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       message: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       author_name: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       authored_date: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       commiter_name: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       commited_date: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       url: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       repositoryId: {
-        allowNull: false,
         type: Sequelize.STRING,
+        onDelete: 'CASCADE',
+        onUpdate: 'SET NULL',
         references: {
-            model: 'Repository',
-            key: 'id',
+          model: {
+            tableName: 'Repositories'
+          },
+          key: 'id'
         }
-      },
-    })
+      }
+    });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Commit')
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Commits');
   }
-}
+};

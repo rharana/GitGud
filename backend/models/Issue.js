@@ -1,24 +1,30 @@
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    const Issue = sequelize.define('Issue', {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        type: DataTypes.STRING
-      },
-      uid: DataTypes.STRING,
-      title: DataTypes.STRING,
-      description: DataTypes.STRING,
-      state: DataTypes.STRING,
-      created_at: DataTypes.STRING,
-      closed_at: DataTypes.STRING
-    });
-  
-    Issue.associate = models => {
+  class Issue extends Model {
+    static associate(models) {
+      Issue.belongsTo(models.GitUser, { foreignKey: 'assigneeId' });
+      Issue.belongsTo(models.GitUser, { foreignKey: 'authorId' });
+      Issue.belongsTo(models.Repository, { foreignKey: 'ownerId' });
       Issue.hasMany(models.Label);
-      Issue.hasOne(models.GitUser);
-      Issue.hasOne(models.GitUser);
-      Issue.hasOne(models.Repository);
-    };
-  
-    return Issue;
-}
+    }
+  }
+  Issue.init({
+    id: DataTypes.STRING,
+    uid: DataTypes.STRING,
+    title: DataTypes.STRING,
+    description: DataTypes.STRING,
+    state: DataTypes.STRING,
+    created_at: DataTypes.STRING,
+    closed_at: DataTypes.STRING,
+    ownerId: DataTypes.STRING,
+    authorId: DataTypes.STRING,
+    assigneeId: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'Issue',
+  });
+  return Issue;
+};

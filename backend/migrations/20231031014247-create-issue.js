@@ -1,64 +1,67 @@
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Issue', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Issues', {
       id: {
-        allowNull: false,
-        primaryKey: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       uid: {
+        type: Sequelize.STRING,
+        primaryKey: true,
         allowNull: false,
-        type: Sequelize.STRING
       },
       title: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       description: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       state: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       created_at: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       closed_at: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       ownerId: {
-        allowNull: false,
         type: Sequelize.STRING,
         onDelete: 'CASCADE',
+        onUpdate: 'SET NULL',
         references: {
-          model: 'Repository',
+          model: {
+            tableName: 'Repositories'
+          },
           key: 'id'
         }
       },
       authorId: {
-        allowNull: false,
         type: Sequelize.STRING,
         onDelete: 'CASCADE',
+        onUpdate: 'SET NULL',
         references: {
-          model: 'Repository',
+          model: {
+            tableName: 'GitUsers'
+          },
           key: 'id'
         }
       },
       assigneeId: {
-        allowNull: false,
         type: Sequelize.STRING,
+        onDelete: 'CASCADE',
+        onUpdate: 'SET NULL',
         references: {
-          model: 'GitUser',
+          model: {
+            tableName: 'GitUsers'
+          },
           key: 'id'
         }
-      },
-    })
+      }
+    });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Issue')
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Issues');
   }
-}
+};

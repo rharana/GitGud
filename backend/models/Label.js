@@ -1,17 +1,21 @@
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    const Label = sequelize.define('Issue', {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        type: DataTypes.STRING
-      },
-      title: DataTypes.STRING,
-      description: DataTypes.STRING
-    });
-  
-    Label.associate = models => {
-      Label.hasOne(models.Label);
-    };
-  
-    return Label;
-}
+  class Label extends Model {
+    static associate(models) {
+      Label.belongsTo(models.Label, { foreignKey: 'issueId' });
+    }
+  }
+  Label.init({
+    id: DataTypes.STRING,
+    title: DataTypes.STRING,
+    description: DataTypes.STRING,
+    issueId: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'Label',
+  });
+  return Label;
+};

@@ -1,22 +1,26 @@
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    const Commit = sequelize.define('Commit', {
-      id: {
-        id: DataTypes.STRING,
-        primaryKey: true,
-        allowNull: false
-      },
-      title: DataTypes.STRING,
-      message: DataTypes.STRING,
-      author_name: DataTypes.STRING,
-      authored_date: DataTypes.STRING,
-      commiter_name: DataTypes.STRING,
-      commited_date: DataTypes.STRING,
-      url: DataTypes.STRING
-    });
-  
-    Commit.associate = models => {
-        Commit.hasOne(models.Repository);
-    };
-  
-    return Commit;
-}
+  class Commit extends Model {
+    static associate(models) {
+      Commit.belongsTo(models.Repository, { foreignKey: 'repositoryId' });
+    }
+  }
+  Commit.init({
+    id: DataTypes.STRING,
+    title: DataTypes.STRING,
+    message: DataTypes.STRING,
+    author_name: DataTypes.STRING,
+    authored_date: DataTypes.STRING,
+    commiter_name: DataTypes.STRING,
+    commited_date: DataTypes.STRING,
+    url: DataTypes.STRING,
+    repositoryId: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'Commit',
+  });
+  return Commit;
+};
